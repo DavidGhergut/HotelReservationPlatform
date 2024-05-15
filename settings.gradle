@@ -1,0 +1,4 @@
+rootProject.name = 'HotelReservationPlatform'
+
+include 'backend'
+project(':backend').projectDir = new File(rootDir, 'backend')
