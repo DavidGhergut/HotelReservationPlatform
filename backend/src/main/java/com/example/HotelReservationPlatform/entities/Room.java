@@ -1,5 +1,6 @@
 package com.example.HotelReservationPlatform.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,10 +15,10 @@ import java.util.List;
 public class Room {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer roomId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long roomId;
 
-    private Integer roomNumber;
+    private Long roomNumber;
 
     /**
      * 1 - single
@@ -26,15 +27,16 @@ public class Room {
      */
     private Integer type;
 
-    private Integer price;
+    private Long price;
 
     private boolean isAvailable;
 
     @ManyToOne
-    @JoinColumn(name = "hotel_Id")
+    @JoinColumn(name = "hotel_id", nullable = false)
+    @JsonBackReference
     private Hotel hotel;
 
-    @OneToMany(mappedBy = "room")
+    @ManyToMany(mappedBy = "rooms")
     private List<Reservation> reservations;
 }
 

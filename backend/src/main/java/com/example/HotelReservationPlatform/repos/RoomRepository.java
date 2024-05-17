@@ -2,7 +2,11 @@ package com.example.HotelReservationPlatform.repos;
 
 import com.example.HotelReservationPlatform.entities.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface RoomRepository extends JpaRepository <Room, Integer> {
+import java.util.List;
 
+@Repository
+public interface RoomRepository extends JpaRepository <Room, Long> {
+    List<Room> findByHotel_HotelId(Long hotelId);
 }

@@ -14,12 +14,13 @@ public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long feedbackId;
-    private int rating;
+
+    private Integer rating;
     private String comment;
-    private int serviceRating;
-    private int cleanlinessRating;
+    private Integer serviceRating;
+    private Integer cleanlinessRating;
 
     @ManyToOne
-    @JoinColumn(name = "hotel_id")
+    @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
 }

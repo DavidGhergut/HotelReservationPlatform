@@ -1,5 +1,6 @@
 package com.example.HotelReservationPlatform.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,14 +14,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Hotel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer hotelId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long hotelId;
 
     private String name;
 
-    private Double Latitude;
+    private Double latitude;
 
-    private Double Longitude;
+    private Double longitude;
 
     private String city;
 
@@ -28,9 +29,13 @@ public class Hotel {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Room> rooms;
 
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Reservation> reservations;
+
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Feedback> feedbacks;
 }
