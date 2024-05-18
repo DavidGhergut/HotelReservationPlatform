@@ -1,16 +1,18 @@
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Dashboard from "./components/pages/Dashboard.tsx";
-import 'leaflet/dist/leaflet.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './components/pages/Dashboard';
+import HotelDetails from './components/pages/HotelDetails';
+import MyBookings from "./components/pages/MyBookings.tsx";
 
-const App = () => {
+function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/hotel/:id" element={<HotelDetails />} />
+                <Route path="/my-bookings" element={<MyBookings />} />
+            </Routes>
+        </Router>
+    );
+}
 
-  return (
-    <Router>
-        <Routes>
-            <Route path="/" element={<Dashboard />} />
-        </Routes>
-    </Router>
-  );
-};
-
-export default App
+export default App;

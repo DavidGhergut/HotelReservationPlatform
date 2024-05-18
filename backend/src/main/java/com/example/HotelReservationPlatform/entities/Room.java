@@ -29,8 +29,6 @@ public class Room {
 
     private Long price;
 
-    private boolean isAvailable;
-
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
     @JsonBackReference

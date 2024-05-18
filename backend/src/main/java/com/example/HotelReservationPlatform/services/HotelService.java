@@ -5,6 +5,8 @@ import com.example.HotelReservationPlatform.repos.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,5 +30,13 @@ public class HotelService {
         double lonStart = longitude - radius / 111;
         double lonEnd = longitude + radius / 111;
         return hotelRepository.findByLatitudeBetweenAndLongitudeBetween(latStart, latEnd, lonStart, lonEnd);
+    }
+
+    public List<Hotel> getAvailableHotels(LocalDate checkInDate, LocalDate checkOutDate) {
+        if (checkInDate != null && checkOutDate != null) {
+            return hotelRepository.findAvailableHotels(checkInDate, checkOutDate);
+        } else {
+            return hotelRepository.findAll();
+        }
     }
 }

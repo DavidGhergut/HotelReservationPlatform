@@ -22,7 +22,10 @@ public class Reservation {
     @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
 
+    @Temporal(TemporalType.DATE)
     private LocalDate checkInDate;
+
+    @Temporal(TemporalType.DATE)
     private LocalDate checkOutDate;
 
     @ManyToMany

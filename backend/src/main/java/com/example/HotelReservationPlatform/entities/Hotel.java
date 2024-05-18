@@ -29,6 +29,8 @@ public class Hotel {
 
     private String phoneNumber;
 
+    private Integer stars;
+
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Room> rooms;

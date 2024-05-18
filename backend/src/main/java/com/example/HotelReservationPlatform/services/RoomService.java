@@ -32,7 +32,6 @@ public class RoomService {
                     room.setRoomNumber(roomDetails.getRoomNumber());
                     room.setType(roomDetails.getType());
                     room.setPrice(roomDetails.getPrice());
-                    room.setAvailable(roomDetails.isAvailable());
                     return roomRepository.save(room);
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Invalid room ID"));

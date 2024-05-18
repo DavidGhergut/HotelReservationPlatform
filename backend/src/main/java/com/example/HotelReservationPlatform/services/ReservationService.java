@@ -8,9 +8,12 @@ import com.example.HotelReservationPlatform.model.ReservationUpdateDTO;
 import com.example.HotelReservationPlatform.repos.HotelRepository;
 import com.example.HotelReservationPlatform.repos.ReservationRepository;
 import com.example.HotelReservationPlatform.repos.RoomRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,23 +23,29 @@ public class ReservationService {
     private ReservationRepository reservationRepository;
 
     @Autowired
-    private HotelRepository hotelRepository;
-
-    @Autowired
     private RoomRepository roomRepository;
 
-    public Reservation createReservation(ReservationDTO reservationDTO) {
-        Hotel hotel = hotelRepository.findById(reservationDTO.getHotelId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid hotel ID"));
-        List<Room> rooms = roomRepository.findAllById(reservationDTO.getRoomIds());
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
+    }
 
-        Reservation reservation = new Reservation();
-        reservation.setHotel(hotel);
-        reservation.setRooms(rooms);
-        reservation.setCheckInDate(reservationDTO.getCheckInDate());
-        reservation.setCheckOutDate(reservationDTO.getCheckOutDate());
+    @Transactional
+    public Reservation createReservation(Reservation reservation) {
+        // Check if all rooms are available for the given dates
+        for (Room room : reservation.getRooms()) {
+            List<Reservation> overlappingReservations = reservationRepository.findOverlappingReservations(
+                    room.getRoomId(), reservation.getCheckInDate(), reservation.getCheckOutDate());
+            if (!overlappingReservations.isEmpty()) {
+                throw new IllegalStateException("Room " + room.getRoomNumber() + " is not available for the selected dates.");
+            }
+        }
 
         return reservationRepository.save(reservation);
+    }
+
+    public boolean isRoomAvailable(Long hotelId, LocalDate checkInDate, LocalDate checkOutDate) {
+        List<Reservation> overlappingReservations = reservationRepository.findOverlappingReservations(hotelId, checkInDate, checkOutDate);
+        return overlappingReservations.isEmpty();
     }
 
     public Optional<Reservation> updateReservation(Long reservationId, ReservationUpdateDTO reservationDTO) {
@@ -64,4 +73,5 @@ public class ReservationService {
                 })
                 .orElse(false);
     }
+
 }

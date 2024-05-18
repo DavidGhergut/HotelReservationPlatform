@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,10 +19,26 @@ public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
+    @GetMapping
+    public ResponseEntity<List<Reservation>> getAllReservations() {
+        try {
+            List<Reservation> reservations = reservationService.getAllReservations();
+            return ResponseEntity.ok(reservations);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody ReservationDTO reservationDTO) {
-        Reservation reservation = reservationService.createReservation(reservationDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
+    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
+        try {
+            Reservation createdReservation = reservationService.createReservation(reservation);
+            return ResponseEntity.ok().body(createdReservation);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(400).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     @PutMapping("/{reservationId}")
